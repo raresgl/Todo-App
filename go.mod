@@ -1,4 +1,4 @@
-module github.com/raresgl/todo
+module github.com/raresgl/Todo-App
 
 go 1.24.0
 
