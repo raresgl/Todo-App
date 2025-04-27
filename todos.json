@@ -1,0 +1,23 @@
+[
+    {
+        "Title": "Go to the gym",
+        "Completed": false,
+        "CreatedAt": "2025-04-27T16:48:52.978223+03:00",
+        "CompletedAt": null,
+        "DueDate": null
+    },
+    {
+        "Title": "Go to the dentist",
+        "Completed": false,
+        "CreatedAt": "2025-04-27T17:03:48.272747+03:00",
+        "CompletedAt": null,
+        "DueDate": "2025-05-01T00:00:00Z"
+    },
+    {
+        "Title": "Go to the gym",
+        "Completed": false,
+        "CreatedAt": "2025-04-27T17:10:37.638929+03:00",
+        "CompletedAt": null,
+        "DueDate": null
+    }
+]
