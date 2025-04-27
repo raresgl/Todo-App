@@ -10,7 +10,7 @@ A simple command-line Todo application written in Go.
 
 ## Usage
 
-\`\`\`
+```
 # Add a todo
 ./todo -add=\"Buy groceries\"
 ./todo -add=\"Pay bills:15.05.2025\"
@@ -23,11 +23,10 @@ A simple command-line Todo application written in Go.
 
 # Edit a todo
 ./todo -edit 2
-\`\`\`
+```
 
 ## Installation
 
-\`\`\`
+```
 go install github.com/yourusername/todo-cli@latest
-\`\`\`
-" > README.md
+```
