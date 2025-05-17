@@ -1,1 +1,26 @@
-[]
+[
+    {
+        "Title": "Du-te du gunoiul",
+        "Completed": false,
+        "CreatedAt": "2025-05-17T19:03:25.165555+03:00",
+        "CompletedAt": null,
+        "DueDate": null,
+        "Priority": 0
+    },
+    {
+        "Title": "Pupo pe andra",
+        "Completed": false,
+        "CreatedAt": "2025-05-17T19:06:40.954902+03:00",
+        "CompletedAt": null,
+        "DueDate": null,
+        "Priority": 2
+    },
+    {
+        "Title": "Bate-o pe andra",
+        "Completed": false,
+        "CreatedAt": "2025-05-17T19:06:53.180612+03:00",
+        "CompletedAt": null,
+        "DueDate": null,
+        "Priority": 1
+    }
+]

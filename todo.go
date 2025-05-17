@@ -6,9 +6,18 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/aquasecurity/table"
+)
+
+type Priority int
+
+const (
+	PriorityHigh   Priority = 1
+	PriorityMedium Priority = 2
+	PriorityLow    Priority = 3
 )
 
 type Todo struct {
@@ -17,17 +26,54 @@ type Todo struct {
 	CreatedAt   time.Time
 	CompletedAt *time.Time
 	DueDate     *time.Time
+	Priority    Priority
 }
 
 type Todos []Todo
 
-func (todos *Todos) add(title string, dueDate *time.Time) {
+type Value interface {
+	String() string
+	Set(string) error
+}
+
+func (p Priority) isValid() bool {
+	return p == PriorityHigh || p == PriorityMedium || p == PriorityLow
+}
+
+func (p Priority) String() string {
+	switch p {
+	case PriorityHigh:
+		return "High"
+	case PriorityMedium:
+		return "Medium"
+	case PriorityLow:
+		return "Low"
+	default:
+		return "Unknown"
+	}
+}
+
+func (p *Priority) Set(s string) error {
+	val, err := strconv.Atoi(s)
+	if err != nil {
+		return fmt.Errorf("priority must be a number")
+	}
+	tmp := Priority(val)
+	if !tmp.isValid() {
+		return fmt.Errorf("invalid priority: %d (valid: 1=High, 2=Medium, 3=Low)", val)
+	}
+	*p = tmp
+	return nil
+}
+
+func (todos *Todos) add(title string, dueDate *time.Time, priority Priority) {
 	todo := Todo{
 		Title:       title,
 		Completed:   false,
 		CreatedAt:   time.Now(),
 		CompletedAt: nil,
 		DueDate:     dueDate,
+		Priority:    priority,
 	}
 	*todos = append(*todos, todo)
 }
@@ -81,9 +127,10 @@ func (todos *Todos) edit(index int) error {
 	fmt.Println("What would you like to edit?")
 	fmt.Println("1. Title")
 	fmt.Println("2. Due Date")
+	fmt.Println("3. Priority")
 
 	var choice string
-	fmt.Print("Enter your choice (1-2): ")
+	fmt.Print("Enter your choice (1-3): ")
 	fmt.Scanln(&choice)
 
 	switch choice {
@@ -114,6 +161,19 @@ func (todos *Todos) edit(index int) error {
 			t[index].DueDate = &parsedTime
 			fmt.Println("Due date updated successfully")
 		}
+	case "3":
+		fmt.Print("Enter the new desired priority: ")
+		scanner := bufio.NewScanner(os.Stdin)
+		if scanner.Scan() {
+			input := strings.TrimSpace(scanner.Text())
+			parsed, err := strconv.Atoi(input)
+			p := Priority(parsed)
+			if err != nil || !p.isValid() {
+				fmt.Println("Error: Invalid priority. Please enter 1 (High), 2 (Medium), or 3 (Low):")
+				os.Exit(1)
+			}
+			t[index].Priority = p
+		}
 	default:
 		fmt.Println("Invalid choice. No changes made.")
 		os.Exit(1)
@@ -125,7 +185,7 @@ func (todos *Todos) edit(index int) error {
 func (todos *Todos) print() {
 	table := table.New(os.Stdout)
 	table.SetRowLines(false)
-	table.SetHeaders("#", "Title", "Completed", "CreatedAt", "CompletedAt", "DueDate")
+	table.SetHeaders("#", "Title", "Completed", "CreatedAt", "CompletedAt", "DueDate", "Priority")
 	for index, t := range *todos {
 		completed := "❌"
 		completedAt := ""
@@ -142,7 +202,7 @@ func (todos *Todos) print() {
 			dueDate = t.DueDate.Format(time.RFC1123)
 		}
 
-		table.AddRow(strconv.Itoa(index), t.Title, completed, t.CreatedAt.Format(time.RFC1123), completedAt, dueDate)
+		table.AddRow(strconv.Itoa(index), t.Title, completed, t.CreatedAt.Format(time.RFC1123), completedAt, dueDate, t.Priority.String())
 	}
 	table.Render()
 }

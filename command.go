@@ -8,13 +8,14 @@ import (
 )
 
 type CmdFlags struct {
-	Add     string
-	DueDate string
-	Delete  int
-	Edit    int
-	Toggle  int
-	List    bool
-	Clean   bool
+	Add      string
+	DueDate  string
+	Delete   int
+	Edit     int
+	Toggle   int
+	List     bool
+	Clean    bool
+	Priority Priority
 }
 
 func NewCmdFlags() *CmdFlags {
@@ -22,6 +23,7 @@ func NewCmdFlags() *CmdFlags {
 
 	flag.StringVar(&cf.Add, "add", "", "Add a new todo specify title and optionally --due for due date")
 	flag.StringVar(&cf.DueDate, "due", "", "Specify due date for new todo (DD.MM.YYYY)")
+	flag.Var(&cf.Priority, "prio", "Add a priority to the to do item. 1-High, 2-Medium, 3-Low")
 	flag.IntVar(&cf.Edit, "edit", -1, "Edit a to do by index. Can edit the name or the due date")
 	flag.IntVar(&cf.Delete, "delete", -1, "Specify a todo by index to delete")
 	flag.IntVar(&cf.Toggle, "toggle", -1, "Specify a todo by index to toggle")
@@ -46,7 +48,11 @@ func (cf *CmdFlags) Execute(todos *Todos) {
 			}
 			dueDate = &parsedTime
 		}
-		todos.add(cf.Add, dueDate)
+		prio := PriorityMedium
+		if cf.Priority.isValid() {
+			prio = cf.Priority
+		}
+		todos.add(cf.Add, dueDate, prio)
 	case cf.Edit != -1:
 		todos.edit(cf.Edit)
 	case cf.Toggle != -1:
