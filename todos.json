@@ -17,9 +17,9 @@
     },
     {
         "Title": "Bate-o pe andra",
-        "Completed": false,
+        "Completed": true,
         "CreatedAt": "2025-05-17T19:06:53.180612+03:00",
-        "CompletedAt": null,
+        "CompletedAt": "2025-05-17T19:10:17.758937+03:00",
         "DueDate": null,
         "Priority": 1
     }
